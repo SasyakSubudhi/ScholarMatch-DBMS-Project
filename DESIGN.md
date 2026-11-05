@@ -1,0 +1,1 @@
+Operate mode. Daylight academic workspace, warm white paper, forest green actions, serif headings and readable sans body. Wide list of opportunities beside a compact profile form. Explicit loading, empty, error states.

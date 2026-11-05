@@ -1,0 +1,1 @@
+ScholarMatch is a university demonstration of eligibility filtering and vector retrieval. Fictional schemes only. Students discover and track applications; admins inspect the application funnel. Two seeded demo accounts, no public deployment.
