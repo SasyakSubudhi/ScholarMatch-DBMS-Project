@@ -1,0 +1,202 @@
+[
+  {
+    "label": "Resulting tables",
+    "sql": "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name",
+    "rows": [
+      {
+        "table_name": "applications"
+      },
+      {
+        "table_name": "eligibility_criteria"
+      },
+      {
+        "table_name": "query_logs"
+      },
+      {
+        "table_name": "required_documents"
+      },
+      {
+        "table_name": "scheme_embeddings"
+      },
+      {
+        "table_name": "scheme_faqs"
+      },
+      {
+        "table_name": "schemes"
+      },
+      {
+        "table_name": "sessions"
+      },
+      {
+        "table_name": "student_profiles"
+      },
+      {
+        "table_name": "users"
+      },
+      {
+        "table_name": "v_scheme_application_stats"
+      }
+    ]
+  },
+  {
+    "label": "Eligibility join and correlated query",
+    "sql": "SELECT scheme_id,name FROM eligible(1)",
+    "rows": [
+      {
+        "scheme_id": 2,
+        "name": "Karnataka Education Grant"
+      },
+      {
+        "scheme_id": 4,
+        "name": "Community Learning Fund"
+      },
+      {
+        "scheme_id": 1,
+        "name": "Engineering Merit Award"
+      }
+    ]
+  },
+  {
+    "label": "Join and aggregate",
+    "sql": "SELECT * FROM v_scheme_application_stats",
+    "rows": [
+      {
+        "scheme_id": 1,
+        "name": "Engineering Merit Award",
+        "saved_count": 0,
+        "applied_count": 0
+      },
+      {
+        "scheme_id": 2,
+        "name": "Karnataka Education Grant",
+        "saved_count": 0,
+        "applied_count": 0
+      },
+      {
+        "scheme_id": 3,
+        "name": "Research Starter Fellowship",
+        "saved_count": 0,
+        "applied_count": 0
+      },
+      {
+        "scheme_id": 4,
+        "name": "Community Learning Fund",
+        "saved_count": 0,
+        "applied_count": 0
+      }
+    ]
+  },
+  {
+    "label": "Nested query",
+    "sql": "SELECT name FROM schemes WHERE max_income>(SELECT AVG(max_income) FROM schemes)",
+    "rows": [
+      {
+        "name": "Research Starter Fellowship"
+      }
+    ]
+  },
+  {
+    "label": "CTE",
+    "sql": "WITH eligible_count AS (SELECT COUNT(*) AS n FROM eligible(1)) SELECT * FROM eligible_count",
+    "rows": [
+      {
+        "n": 3
+      }
+    ]
+  },
+  {
+    "label": "Recursive CTE",
+    "sql": "WITH RECURSIVE years(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM years WHERE n<4) SELECT * FROM years",
+    "rows": [
+      {
+        "n": 1
+      },
+      {
+        "n": 2
+      },
+      {
+        "n": 3
+      },
+      {
+        "n": 4
+      }
+    ]
+  },
+  {
+    "label": "DML insert",
+    "sql": "INSERT INTO applications(user_id,scheme_id,status) VALUES(1,1,'saved') ON CONFLICT(user_id,scheme_id) DO UPDATE SET status='saved' RETURNING *",
+    "rows": [
+      {
+        "application_id": 1,
+        "user_id": 1,
+        "scheme_id": 1,
+        "status": "saved",
+        "applied_at": null,
+        "updated_at": "2026-11-05T07:02:26.767Z"
+      }
+    ]
+  },
+  {
+    "label": "DML update and timestamp trigger",
+    "sql": "UPDATE applications SET status='applied' WHERE user_id=1 AND scheme_id=1 RETURNING *",
+    "rows": [
+      {
+        "application_id": 1,
+        "user_id": 1,
+        "scheme_id": 1,
+        "status": "applied",
+        "applied_at": null,
+        "updated_at": "2026-11-05T07:02:26.767Z"
+      }
+    ]
+  },
+  {
+    "label": "Vector read",
+    "sql": "SELECT scheme_id,1-(embedding <=> $1::vector) AS similarity FROM scheme_embeddings ORDER BY embedding <=> $1::vector",
+    "rows": [
+      {
+        "scheme_id": 1,
+        "similarity": 0.5883484062060241
+      },
+      {
+        "scheme_id": 4,
+        "similarity": 0.21320071181056854
+      },
+      {
+        "scheme_id": 3,
+        "similarity": 0
+      },
+      {
+        "scheme_id": 2,
+        "similarity": 0
+      }
+    ]
+  },
+  {
+    "label": "Vector update",
+    "sql": "UPDATE scheme_embeddings SET embedding=$1::vector WHERE scheme_id=1 RETURNING scheme_id",
+    "rows": [
+      {
+        "scheme_id": 1
+      }
+    ]
+  },
+  {
+    "label": "Vector delete",
+    "sql": "DELETE FROM scheme_embeddings WHERE scheme_id=1 RETURNING scheme_id",
+    "rows": [
+      {
+        "scheme_id": 1
+      }
+    ]
+  },
+  {
+    "label": "DML delete",
+    "sql": "DELETE FROM applications WHERE user_id=1 AND scheme_id=1 RETURNING application_id",
+    "rows": [
+      {
+        "application_id": 1
+      }
+    ]
+  }
+]
