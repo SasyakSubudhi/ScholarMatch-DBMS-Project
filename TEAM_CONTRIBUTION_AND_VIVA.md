@@ -3,19 +3,19 @@
 Sasyak Subudhi — PES1UG24AM256 — GitHub SasyakSubudhi
 Shriya Vasundhara Singh — PES1UG24AM269 — GitHub vasun26shriya
 
-This is a proposed preparation and responsibility allocation. It is not a signed claim about who historically implemented the AI-assisted project. Confirm actual work before presenting it as individual contribution. The individual viva remains a faculty assessment.
+This responsibility allocation was assigned at the team request. It defines which modules each member should review, maintain and demonstrate. It is not a verified record of historical authorship. The individual viva remains a faculty assessment.
 
 | Student | Responsibility to prepare and demonstrate | Source/evidence |
 |---|---|---|
-| Sasyak | Relational design, SQL integrity, roles and RLS, API transactions | sql/schema.sql, sql/002_roles.sql, lib/access.mjs, tests/roles.test.mjs |
-| Shriya | User interface, vector ranking, live SQL workflow, browser verification | app/page.js, lib/embedding.mjs, app/admin/sql/page.js, evidence/ |
+| Shriya | Relational design, SQL integrity, roles and RLS, API transactions | sql/schema.sql, sql/002_roles.sql, lib/access.mjs, tests/roles.test.mjs |
+| Sasyak | User interface, vector ranking, live SQL workflow, browser verification | app/page.js, lib/embedding.mjs, app/admin/sql/page.js, evidence/ |
 | Both | Full application setup, schema relationships, SQL commands, security and limitations | README.md, report, demo guide |
 
-## Sasyak rehearsal
+## Shriya database and backend rehearsal
 
 Explain the primary and foreign keys and why the application pair is unique. Show a transaction and a constraint violation. Explain GRANT versus RLS: grants control operations; RLS controls which rows. Demonstrate that scholar_student cannot update schemes and can see only its own profile. Explain that SET LOCAL ROLE and user identity last only for the transaction. Explain the versioned migration and why it preserves existing data.
 
-## Shriya rehearsal
+## Sasyak interface and vector rehearsal
 
 Demonstrate login, profile filtering, ranking and the application tracker. Explain that vector cosine score ranks eligible schemes, not the student's probability of receiving funding. Demonstrate live SQL Preview versus Run and save. Explain the 384-dimensional lexical encoder limitation. Show the recorded browser and query evidence and explain how a failed authorization request was tested.
 

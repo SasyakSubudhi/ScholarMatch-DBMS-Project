@@ -6,7 +6,7 @@
 - SQL role screenshots and executed permission evidence are included in the source evidence directory.
 - Existing-database migration was verified separately: the stored student profile was retained and the roles migration was applied without reseeding.
 - The report is updated with database roles, RLS, the live SQL console, screenshots, and the rubric status.
-- Individual responsibility and viva materials are prepared. Actual individual contributions require the students' truthful confirmation; the viva is performed by the students and assessed by faculty.
+- Individual responsibility and viva materials are prepared. Team responsibilities have been assigned at the team request. Historical authorship is not asserted; the viva is performed by the students and assessed by faculty.
 - The vector encoder remains a documented lexical baseline. No trained semantic model, real scholarship rules, production deployment or awarded marks are claimed.
 
 To use this update: stop the current project server, run npm run build and npm start from the ScholarMatch folder. The first request applies the database roles migration automatically to existing data. Do not run multiple server processes against the same PGlite data folder.

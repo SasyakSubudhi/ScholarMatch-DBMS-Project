@@ -29,7 +29,7 @@ All four schemes are fictional. “Apply” records a local demo application. Th
 
 ## Team preparation
 
-Suggested study split, not a claim about historical work: Sasyak studies schema, SQL, API and transactions; Shriya studies interface, vector retrieval, screenshots and testing. Both should understand all modules and record their actual contributions and modifications before the individual viva. AI-assisted implementation and documentation were prepared for this submission; no fake commit attribution is used.
+Assigned team responsibilities: Sasyak handles interface, vector search and testing; Shriya handles database design, SQL, security and backend. This allocation is not a verified record of historical authorship. Both should understand all modules and record their actual contributions and modifications before the individual viva. AI-assisted implementation and documentation were prepared for this submission; no fake commit attribution is used.
 
 ## Sources
 
