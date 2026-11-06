@@ -1,0 +1,10 @@
+{
+  "studentProfile": true,
+  "studentApplication": true,
+  "studentSqlDenied": true,
+  "adminDatabaseRole": "scholar_admin",
+  "adminFunnel": true,
+  "previewRollback": true,
+  "savedUpdate": true,
+  "errorRecovery": true
+}

@@ -1,3 +1,4 @@
+import {scopedDatabase} from '../../../lib/access.mjs';
 import {db} from '../../../lib/db.mjs';
 export const runtime='nodejs';
 export const dynamic='force-dynamic';
@@ -19,7 +20,7 @@ export async function POST(request){
  if(/^(BEGIN|START|COMMIT|END|ROLLBACK|ABORT|SAVEPOINT|RELEASE|PREPARE)\b/i.test(first))return Response.json({error:'Use Preview to roll back, or uncheck Preview to save. Transaction commands are managed automatically.'},{status:400});
  let result;const rollback=Symbol('preview');
  try{
-  try{await d.transaction(async tx=>{
+  try{await scopedDatabase(d,user).transaction(async tx=>{
    await tx.query('SELECT require_admin($1)',[user.user_id]);
    await tx.query("SET LOCAL statement_timeout = '5s'");
    const r=await tx.query(body.sql);

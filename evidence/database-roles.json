@@ -1,0 +1,92 @@
+[
+  {
+    "role": "student",
+    "sql": "SELECT current_user AS database_role",
+    "rows": [
+      {
+        "database_role": "scholar_student"
+      }
+    ]
+  },
+  {
+    "role": "student",
+    "sql": "SELECT user_id,course,cgpa FROM student_profiles",
+    "rows": [
+      {
+        "user_id": 1,
+        "course": "Engineering",
+        "cgpa": "8.5"
+      }
+    ]
+  },
+  {
+    "role": "student",
+    "sql": "SELECT rolname,rolsuper,rolcreaterole,rolcanlogin FROM pg_roles WHERE rolname LIKE 'scholar_%'",
+    "rows": [
+      {
+        "rolname": "scholar_admin",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcanlogin": false
+      },
+      {
+        "rolname": "scholar_student",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcanlogin": false
+      }
+    ]
+  },
+  {
+    "role": "student",
+    "sql": "UPDATE schemes SET max_income=max_income WHERE scheme_id=1 RETURNING scheme_id",
+    "error": "permission denied for table schemes"
+  },
+  {
+    "role": "admin",
+    "sql": "SELECT current_user AS database_role",
+    "rows": [
+      {
+        "database_role": "scholar_admin"
+      }
+    ]
+  },
+  {
+    "role": "admin",
+    "sql": "SELECT user_id,course,cgpa FROM student_profiles",
+    "rows": [
+      {
+        "user_id": 1,
+        "course": "Engineering",
+        "cgpa": "8.5"
+      }
+    ]
+  },
+  {
+    "role": "admin",
+    "sql": "SELECT rolname,rolsuper,rolcreaterole,rolcanlogin FROM pg_roles WHERE rolname LIKE 'scholar_%'",
+    "rows": [
+      {
+        "rolname": "scholar_admin",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcanlogin": false
+      },
+      {
+        "rolname": "scholar_student",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcanlogin": false
+      }
+    ]
+  },
+  {
+    "role": "admin",
+    "sql": "UPDATE schemes SET max_income=max_income WHERE scheme_id=1 RETURNING scheme_id",
+    "rows": [
+      {
+        "scheme_id": 1
+      }
+    ]
+  }
+]

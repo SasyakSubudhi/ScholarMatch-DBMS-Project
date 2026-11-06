@@ -1,0 +1,22 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {db,hash} from '../lib/db.mjs';import {scopedDatabase} from '../lib/access.mjs';
+test('database grants and RLS isolate students and restrict mutations',async()=>{
+ const d=await db();
+ const id=(await d.query("INSERT INTO users(full_name,email,password_hash,role) VALUES('Other Student','other@test.local',$1,'student') RETURNING user_id",[hash('test')])).rows[0].user_id;
+ await d.query("INSERT INTO student_profiles VALUES($1,21,'Engineering',9,100000,'Karnataka','General')",[id]);
+ const student=scopedDatabase(d,{user_id:1,role:'student'}),admin=scopedDatabase(d,{user_id:2,role:'admin'});
+ assert.equal((await student.query('SELECT current_user AS role')).rows[0].role,'scholar_student');
+ assert.equal((await student.query('SELECT * FROM student_profiles')).rows.length,1);
+ assert.equal((await student.query('UPDATE student_profiles SET income=0 WHERE user_id=$1',[id])).affectedRows,0);
+ await assert.rejects(student.query('UPDATE schemes SET max_income=0'));
+ await assert.rejects(student.query('SELECT password_hash FROM users'));
+ await assert.rejects(student.query('SELECT * FROM sessions'));
+ await assert.rejects(student.query("INSERT INTO applications(user_id,scheme_id,status) VALUES($1,1,'saved')",[id]));
+ assert.equal((await student.query('SELECT * FROM eligible(1)')).rows.length,3);
+ assert.equal((await student.query('SELECT * FROM eligible($1)',[id])).rows.length,0);
+ assert.equal((await admin.query('SELECT * FROM student_profiles')).rows.length,2);
+ await admin.query('UPDATE schemes SET max_income=500000 WHERE scheme_id=1');
+ await assert.rejects(admin.query('ALTER TABLE schemes DISABLE TRIGGER ALL'));
+ assert.notEqual((await d.query('SELECT current_user AS role')).rows[0].role,'scholar_student');
+ await d.close();
+});

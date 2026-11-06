@@ -21,7 +21,7 @@ Next.js App Router, authenticated student and administrator screens, scrypt pass
 
 ## Scope and limitations
 
-All four schemes are fictional. “Apply” records a local demo application. The embedding is a deterministic hashed bag of words, **not a trained language model**; it demonstrates vector storage and ranking, with lexical rather than reliable semantic matching. pgvector is a vector extension inside PostgreSQL, not a separate NoSQL server. PGlite uses one trusted server database principal; database authorization uses a guard function supplied with the server-resolved user identity, rather than PostgreSQL LOGIN roles or RLS. A production multi-user server should add per-role privileges/RLS, HTTPS Secure cookies, CSRF tokens, login throttling, migrations, trained embeddings, audited scheme feeds and deployment monitoring.
+All four schemes are fictional. “Apply” records a local demo application. The embedding is a deterministic hashed bag of words, **not a trained language model**; it demonstrates vector storage and ranking, with lexical rather than reliable semantic matching. pgvector is a vector extension inside PostgreSQL, not a separate NoSQL server. PGlite uses a trusted bootstrap connection for authentication and migrations. Authenticated business requests switch transactionally to scholar_student or scholar_admin using SET LOCAL ROLE. PostgreSQL GRANT privileges and RLS enforce student ownership. These are NOLOGIN authorization roles because PGlite is embedded; they are real database roles rather than independent network login accounts. A production multi-user server should add HTTPS Secure cookies, CSRF tokens, login throttling, migrations, trained embeddings, audited scheme feeds and deployment monitoring.
 
 ## Project layout
 
@@ -54,3 +54,9 @@ ROLLBACK;
 ## Live SQL while the website runs
 
 Sign in as admin and click SQL console, or open /admin/sql. It shares the running application's database connection. Enter one statement and run it. Preview is enabled by default and rolls back mutations. Uncheck Preview and choose Run and save to commit changes, then refresh the application tab. SQL errors roll back the request. BEGIN/COMMIT/ROLLBACK commands are managed by the server; each request is a separate transaction. Queries have a 5 second statement timeout; results display at most 500 rows. This is a powerful localhost admin demonstration tool, not a public production feature. Students and unauthenticated users are denied by the API. Do not use the standalone npm run sql process while the web server is running.
+
+## Database authorization demonstration
+
+`sql/002_roles.sql` is a versioned migration and is applied once on startup without clearing existing data. `lib/access.mjs` binds the server-authenticated identity to each transaction and switches its PostgreSQL role. Students cannot update schemes, read password hashes or sessions, or access another student's profile/application rows. Administrators can manage scheme data. Business requests never run with bootstrap permissions. `tests/roles.test.mjs` exercises these restrictions directly in PostgreSQL. To capture evidence on temporary data: set DB_PATH to memory://, then run `node scripts/security-evidence.mjs`.
+
+The browser shares its session across tabs on the same host. To demonstrate the admin console and student view together, use separate browser profiles (or a private window), then refresh the student page after saving SQL changes. Otherwise switching accounts in one tab changes the account used by the other tabs too.
