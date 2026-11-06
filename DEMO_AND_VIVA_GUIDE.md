@@ -30,3 +30,4 @@ Start: extract ScholarMatch, open a terminal in it, run npm ci, npm run build, n
 Record your actual contributions before the viva. Suggested preparation split: Sasyak — database, API and transactions; Shriya — interface, vectors and verification. This is a study plan, not a claim of past work. Both students should explain the whole project. The project was prepared with AI assistance; no fabricated authorship history is included.
 
 The supplied template did not identify faculty names or class section. The report says faculty names were not provided. Fill those details if your department requires them.
+

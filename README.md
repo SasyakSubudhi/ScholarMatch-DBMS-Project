@@ -36,3 +36,21 @@ Suggested study split, not a claim about historical work: Sasyak studies schema,
 - https://nextjs.org/docs/app/getting-started/route-handlers
 - https://github.com/pgvector/pgvector
 - https://pglite.dev/docs/
+
+## Interactive SQL console
+
+Stop every running ScholarMatch server with Ctrl+C before opening the same database. Run `npm run sql` from this directory. Enter SQL ending with a semicolon; multiline queries and multiple statements are supported. `.tables` lists relations, `.schema` shows the initialization schema, and `.quit` closes the database. Then run `npm start` to view saved changes in the application. This console has full local database access: INSERT, UPDATE, DELETE and DDL change the saved database. For a reversible practice session, start with `BEGIN;` and finish with `ROLLBACK;`. Run `COMMIT;` only to keep your transaction changes. If DB_PATH is set to memory://, the console uses a temporary database instead of the saved application database.
+
+Example:
+```sql
+SELECT scheme_id, name, max_income FROM schemes;
+SELECT scheme_id, name FROM eligible(1);
+BEGIN;
+UPDATE schemes SET max_income=600000 WHERE scheme_id=1;
+SELECT scheme_id, name, max_income FROM schemes WHERE scheme_id=1;
+ROLLBACK;
+```
+
+## Live SQL while the website runs
+
+Sign in as admin and click SQL console, or open /admin/sql. It shares the running application's database connection. Enter one statement and run it. Preview is enabled by default and rolls back mutations. Uncheck Preview and choose Run and save to commit changes, then refresh the application tab. SQL errors roll back the request. BEGIN/COMMIT/ROLLBACK commands are managed by the server; each request is a separate transaction. Queries have a 5 second statement timeout; results display at most 500 rows. This is a powerful localhost admin demonstration tool, not a public production feature. Students and unauthenticated users are denied by the API. Do not use the standalone npm run sql process while the web server is running.
